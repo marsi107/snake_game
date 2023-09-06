@@ -11,13 +11,18 @@ display_x = 700
 display_y = 700
 screen = pygame.display.set_mode((display_x, display_y)) # define the screen size
 clock = pygame.time.Clock()
-is_running = True
 pygame.display.set_caption('Snake Game')
+is_running = True
+is_game_over = False
 
 # game objects setup
 snake_initial_pos = pygame.Vector2(200, display_y / 2)
 snk = Snake(snake_initial_pos)
 apl = Apple(display_x, display_y)
+
+def reset_game():
+    snk.reset()
+    apl.generate_new_apple_position()
 
 try:
     while is_running:
@@ -41,13 +46,22 @@ try:
 
         # Check for collisions with the borders
         if snk.snake_pos.x < snk.SNAKE_SIZE:
+            is_game_over = True
             snk.change_snake_direction('esc')
-        elif snk.snake_pos.x > display_x - snk.SNAKE_SIZE:
+        if snk.snake_pos.x > display_x - snk.SNAKE_SIZE:
+            is_game_over = True
             snk.change_snake_direction('esc')
         if snk.snake_pos.y < snk.SNAKE_SIZE:
+            is_game_over = True
             snk.change_snake_direction('esc')
-        elif snk.snake_pos.y > display_y - snk.SNAKE_SIZE:
+        if snk.snake_pos.y > display_y - snk.SNAKE_SIZE:
+            is_game_over = True
             snk.change_snake_direction('esc')
+            
+        # behavior when is game over
+        if is_game_over:
+            is_game_over = False
+            reset_game()
 
         # keyboard reading
         keys = pygame.key.get_pressed()
