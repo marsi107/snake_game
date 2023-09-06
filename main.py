@@ -1,20 +1,23 @@
 import pygame # for game features
 
-import random # to place the fruit randomly
+import random
 
 from snake import Snake
+from fruit import Apple
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((700, 700)) # define the screen size
+display_x = 700
+display_y = 700
+screen = pygame.display.set_mode((display_x, display_y)) # define the screen size
 clock = pygame.time.Clock()
 is_running = True
-delta_time = 0 # define delta time
+pygame.display.set_caption('Snake Game')
 
-snake_initial_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
-pygame.display.set_caption("Snake Game")
+# game objects setup
+snake_initial_pos = pygame.Vector2(200, display_y / 2)
 snk = Snake(snake_initial_pos)
-
+apl = Apple(display_x, display_y)
 
 try:
     while is_running:
@@ -24,10 +27,19 @@ try:
                 is_running = False
 
         # visual objects
-        screen.fill("grey")
-        pygame.draw.circle(screen, "yellow", snk.snake_pos, snk.snake_size)
+        screen.fill('grey')
+        # create the snake
+        snake_obj = pygame.draw.circle(screen, snk.SNAKE_COLOR, snk.snake_pos, snk.SNAKE_SIZE)
+        snake_collider_box = pygame.Rect(snake_obj)
+        # create the apple
+        apl_obj = pygame.draw.circle(screen, apl.APPLE_COLOR, apl.apple_pos, apl.APPLE_SIZE)
+        apple_collider_box = pygame.Rect(apl_obj)
 
-        # game mechanics
+        # set collisions
+        if snake_collider_box.colliderect(apple_collider_box):
+            apl.generate_new_apple_position()
+
+        # keyboard reading
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w] or keys[pygame.K_UP]:
             snk.change_snake_direction('u')
@@ -37,13 +49,17 @@ try:
             snk.change_snake_direction('l')
         elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             snk.change_snake_direction('r')
+        elif keys[pygame.K_ESCAPE]:
+            snk.change_snake_direction('esc')
 
+        # set snake speed constant based on the direction given above
         snk.snake_pos.x += snk.snake_speed_x
         snk.snake_pos.y += snk.snake_speed_y
 
+        # display settings
         pygame.display.flip() # update the display
         clock.tick(60) # limits FPS to 60
 except:
-    print('Exception occured')
+    raise Exception('Exception occured')
 finally:
     pygame.quit()
