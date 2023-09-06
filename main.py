@@ -6,7 +6,9 @@ from snake import Snake
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((700, 700)) # define the screen size
+display_x = 700
+display_y = 700
+screen = pygame.display.set_mode((display_x, display_y)) # define the screen size
 clock = pygame.time.Clock()
 is_running = True
 delta_time = 0 # define delta time
@@ -38,12 +40,24 @@ try:
         elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             snk.change_snake_direction('r')
 
-        snk.snake_pos.x += snk.snake_speed_x
-        snk.snake_pos.y += snk.snake_speed_y
+        # If snake reaches the end, enter from the other side
+        if snk.snake_pos.x + snk.snake_speed_x > display_x:
+            snk.snake_pos.x = 0
+        elif snk.snake_pos.x + snk.snake_speed_x < 0:
+            snk.snake_pos.x = 700
+        else:
+            snk.snake_pos.x += snk.snake_speed_x
 
-        pygame.display.flip() # update the display
-        clock.tick(60) # limits FPS to 60
+        if snk.snake_pos.y + snk.snake_speed_y > display_y:
+            snk.snake_pos.y = 0
+        elif snk.snake_pos.y + snk.snake_speed_y < 0:
+            snk.snake_pos.y = 700
+        else:
+            snk.snake_pos.y += snk.snake_speed_y
+
+        pygame.display.flip()  # update the display
+        clock.tick(60)  # limits FPS to 60
 except:
-    print('Exception occured')
+    raise Exception('Exception occurred')
 finally:
     pygame.quit()
