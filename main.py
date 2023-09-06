@@ -39,6 +39,16 @@ try:
         if snake_collider_box.colliderect(apple_collider_box):
             apl.generate_new_apple_position()
 
+        # Check for collisions with the borders
+        if snk.snake_pos.x < snk.SNAKE_SIZE:
+            snk.change_snake_direction('esc')
+        elif snk.snake_pos.x > display_x - snk.SNAKE_SIZE:
+            snk.change_snake_direction('esc')
+        if snk.snake_pos.y < snk.SNAKE_SIZE:
+            snk.change_snake_direction('esc')
+        elif snk.snake_pos.y > display_y - snk.SNAKE_SIZE:
+            snk.change_snake_direction('esc')
+
         # keyboard reading
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w] or keys[pygame.K_UP]:
