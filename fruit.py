@@ -3,7 +3,7 @@
 import random # to place the fruit randomly
 
 class Apple:
-    APPLE_COLOR = 'green'
+    COLOR = 'green'
     pos_x = 0
     pos_y = 0
     grid = None
