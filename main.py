@@ -19,8 +19,7 @@ score = 0
 # game objects setup
 game_ctrl = gb.Controller(screen)
 grid = gb.Grid(screen)
-snake_initial_pos = pygame.Vector2(200, gb.DISPLAY_Y / 2)
-snk = Snake(snake_initial_pos)
+snk = Snake(grid)
 apl = Apple(grid)
 
 def reset_game():
@@ -38,12 +37,12 @@ try:
         screen.fill('grey')
         grid.draw_grid()
         # create the snake
-        snake_obj = pygame.draw.circle(screen, snk.SNAKE_COLOR, snk.snake_pos, snk.SNAKE_SIZE)
+        snake_obj = pygame.Rect(snk.pos_x, snk.pos_y, grid.cell_width, grid.cell_height)
+        pygame.draw.rect(screen, snk.COLOR, snake_obj)
         snake_collider_box = pygame.Rect(snake_obj)
         # create the apple
-        #apl_obj = pygame.draw.rect(screen, apl.APPLE_COLOR, apl.apple_pos, apl.APPLE_SIZE)
         apl_obj = pygame.Rect(apl.pos_x, apl.pos_y, grid.cell_width, grid.cell_height)
-        pygame.draw.rect(screen, apl.APPLE_COLOR, apl_obj)
+        pygame.draw.rect(screen, apl.COLOR, apl_obj)
         apple_collider_box = pygame.Rect(apl_obj)
 
         # set collisions
@@ -52,16 +51,16 @@ try:
             score += 1
 
         # Check for collisions with the borders
-        if snk.snake_pos.x < snk.SNAKE_SIZE:
+        if snk.pos_x < 0:
             is_game_over = True
             snk.change_snake_direction('esc')
-        if snk.snake_pos.x > gb.DISPLAY_X - snk.SNAKE_SIZE:
+        if snk.pos_x > gb.DISPLAY_X - grid.cell_height:
             is_game_over = True
             snk.change_snake_direction('esc')
-        if snk.snake_pos.y < snk.SNAKE_SIZE:
+        if snk.pos_y < 0:
             is_game_over = True
             snk.change_snake_direction('esc')
-        if snk.snake_pos.y > gb.DISPLAY_Y - snk.SNAKE_SIZE:
+        if snk.pos_y > gb.DISPLAY_Y - grid.cell_width:
             is_game_over = True
             snk.change_snake_direction('esc')
 
@@ -91,9 +90,7 @@ try:
             # TODO add pause functions
             pass
 
-        # set snake speed constant based on the direction given above
-        snk.snake_pos.x += snk.snake_speed_x
-        snk.snake_pos.y += snk.snake_speed_y
+        snk.move()
 
         # display settings
         pygame.display.flip() # update the display
