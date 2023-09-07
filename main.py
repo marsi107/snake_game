@@ -21,7 +21,7 @@ game_ctrl = gb.Controller(screen)
 grid = gb.Grid(screen)
 snake_initial_pos = pygame.Vector2(200, gb.DISPLAY_Y / 2)
 snk = Snake(snake_initial_pos)
-apl = Apple(gb.DISPLAY_X, gb.DISPLAY_Y)
+apl = Apple(grid)
 
 def reset_game():
     snk.reset()
@@ -41,7 +41,9 @@ try:
         snake_obj = pygame.draw.circle(screen, snk.SNAKE_COLOR, snk.snake_pos, snk.SNAKE_SIZE)
         snake_collider_box = pygame.Rect(snake_obj)
         # create the apple
-        apl_obj = pygame.draw.circle(screen, apl.APPLE_COLOR, apl.apple_pos, apl.APPLE_SIZE)
+        #apl_obj = pygame.draw.rect(screen, apl.APPLE_COLOR, apl.apple_pos, apl.APPLE_SIZE)
+        apl_obj = pygame.Rect(apl.pos_x, apl.pos_y, grid.cell_width, grid.cell_height)
+        pygame.draw.rect(screen, apl.APPLE_COLOR, apl_obj)
         apple_collider_box = pygame.Rect(apl_obj)
 
         # set collisions

@@ -38,8 +38,8 @@ class Grid:
     def __init__(self, screen) -> None:
         self.screen = screen
         # Calculate the size of each grid cell
-        self.cell_width = DISPLAY_X // self.NUM_COLS
-        self.cell_height = DISPLAY_Y // self.NUM_ROWS
+        self.cell_width = DISPLAY_X / self.NUM_COLS
+        self.cell_height = DISPLAY_Y / self.NUM_ROWS
 
     def draw_grid(self):
         for row in range(self.NUM_ROWS):
