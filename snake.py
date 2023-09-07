@@ -91,7 +91,7 @@ class Snake:
 
     def draw_body(self):
         for i, segment in enumerate(self.body):
-
+            # TODO make the body move
             temp_pos_x = segment[0]
             temp_pos_y = segment[1]
             snake_obj = pygame.Rect(segment[0], segment[1], self.grid.cell_width, self.grid.cell_height)
