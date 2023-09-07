@@ -1,5 +1,7 @@
 # class to create and interact with the snake
 
+import pygame
+
 import math # to round up and down the raw directions for positioning
 
 class Snake:
@@ -9,44 +11,46 @@ class Snake:
     SPEED = 1
     INTIAL_DIR_X = 2
     INTIAL_DIR_Y = 0
+    screen = None
     grid = None
     raw_dir = 'r'
     pos_x, pos_y = 0, 0
     dir_x, dir_y = 2, 0
-    opposite_snake_direction = 'l'
+    opposite_dir = 'l'
+    body = None
 
-    def __init__(self, grid):
+    def __init__(self, screen, grid):
+        self.screen = screen
         self.grid = grid
-        self.pos_x = self.INTIAL_POS_X * grid.cell_width
-        self.pos_y = self.INTIAL_POS_Y * grid.cell_height
+        self.reset()
 
     def change_snake_direction(self, direction):
         # guardian to control that the snake doesn't go backwards
-        if direction == self.opposite_snake_direction:
+        if direction == self.opposite_dir:
             return
         if direction == 'u':
             self.change_raw_dir(direction)
             self.dir_x = 0
             self.dir_y = -2
-            self.opposite_snake_direction = 'd'
+            self.opposite_dir = 'd'
             self.raw_dir = 'u'
         elif direction == 'd':
             self.change_raw_dir(direction)
             self.dir_x = 0
             self.dir_y = 2
-            self.opposite_snake_direction = 'u'
+            self.opposite_dir = 'u'
             self.raw_dir = 'd'
         elif direction == 'l':
             self.change_raw_dir(direction)
             self.dir_x = -2
             self.dir_y = 0
-            self.opposite_snake_direction = 'r'
+            self.opposite_dir = 'r'
             self.raw_dir = 'l'
         elif direction == 'r':
             self.change_raw_dir(direction)
             self.dir_x = 2
             self.dir_y = 0
-            self.opposite_snake_direction = 'l'
+            self.opposite_dir = 'l'
             self.raw_dir = 'r'
         elif direction == 'esc':
             self.dir_x = 0
@@ -85,6 +89,15 @@ class Snake:
             self.pos_x = raw_pos_x * self.grid.cell_width
             self.pos_y = raw_pos_y * self.grid.cell_height
 
+    def draw_body(self):
+        for i, segment in enumerate(self.body):
+
+            temp_pos_x = segment[0]
+            temp_pos_y = segment[1]
+            snake_obj = pygame.Rect(segment[0], segment[1], self.grid.cell_width, self.grid.cell_height)
+            pygame.draw.rect(self.screen, self.COLOR, snake_obj)
+            #snake_collider_box = pygame.Rect(snake_obj)
+
     # set snake speed constant based on the direction given above
     def move(self):
         self.pos_x += self.dir_x * self.SPEED
@@ -96,5 +109,9 @@ class Snake:
         self.pos_y = self.INTIAL_POS_Y * self.grid.cell_height
         self.dir_x = self.INTIAL_DIR_X
         self.dir_y = self.INTIAL_DIR_Y
-        self.opposite_snake_direction = 'l'
+        self.opposite_dir = 'l'
         self.raw_dir = 'r'
+        self.body = [
+            [(self.INTIAL_POS_X-1) * self.grid.cell_width, (self.INTIAL_POS_Y) * self.grid.cell_height], 
+            [(self.INTIAL_POS_X-2) * self.grid.cell_width, (self.INTIAL_POS_Y) * self.grid.cell_height]
+            ]
