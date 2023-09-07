@@ -7,12 +7,15 @@ class Snake:
     INTIAL_DIR_X = 2
     INTIAL_DIR_Y = 0
     grid = None
+    raw_dir = 'r'
     pos_x, pos_y = 0, 0
     dir_x, dir_y = 2, 0
     opposite_snake_direction = 'l'
 
     def __init__(self, grid):
         self.grid = grid
+        self.raw_pos_x = self.INTIAL_POS_X
+        self.raw_pos_y = self.INTIAL_POS_Y
         self.pos_x = self.INTIAL_POS_X * grid.cell_width
         self.pos_y = self.INTIAL_POS_Y * grid.cell_height
 
@@ -21,24 +24,37 @@ class Snake:
         if direction == self.opposite_snake_direction:
             return
         if direction == 'u':
+            self.change_raw_dir(direction)
             self.dir_x = 0
             self.dir_y = -2
             self.opposite_snake_direction = 'd'
+            self.raw_dir = 'u'
         elif direction == 'd':
+            self.change_raw_dir(direction)
             self.dir_x = 0
             self.dir_y = 2
             self.opposite_snake_direction = 'u'
+            self.raw_dir = 'd'
         elif direction == 'l':
+            self.change_raw_dir(direction)
             self.dir_x = -2
             self.dir_y = 0
             self.opposite_snake_direction = 'r'
+            self.raw_dir = 'l'
         elif direction == 'r':
+            self.change_raw_dir(direction)
             self.dir_x = 2
             self.dir_y = 0
             self.opposite_snake_direction = 'l'
+            self.raw_dir = 'r'
         elif direction == 'esc':
             self.dir_x = 0
             self.dir_y = 0
+
+    def change_raw_dir(self, direction):
+        if direction != self.raw_dir:
+            self.pos_x = int(self.pos_x / self.grid.cell_width) * self.grid.cell_width
+            self.pos_y = int(self.pos_y / self.grid.cell_height) * self.grid.cell_height
 
     # set snake speed constant based on the direction given above
     def move(self):
