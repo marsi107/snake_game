@@ -18,7 +18,7 @@ score = 0
 
 # game objects setup
 game_ctrl = gb.Controller(screen)
-grid = gb.Grid()
+grid = gb.Grid(screen)
 snake_initial_pos = pygame.Vector2(200, gb.DISPLAY_Y / 2)
 snk = Snake(snake_initial_pos)
 apl = Apple(gb.DISPLAY_X, gb.DISPLAY_Y)
@@ -36,6 +36,7 @@ try:
 
         # visual objects
         screen.fill('grey')
+        grid.draw_grid()
         # create the snake
         snake_obj = pygame.draw.circle(screen, snk.SNAKE_COLOR, snk.snake_pos, snk.SNAKE_SIZE)
         snake_collider_box = pygame.Rect(snake_obj)

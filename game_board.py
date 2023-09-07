@@ -4,6 +4,7 @@ import pygame
 DISPLAY_X = 700
 DISPLAY_Y = 700
 
+# helper class to add main functionalities
 class Controller:
     FONT_SIZE = 42
     screen = None
@@ -26,9 +27,23 @@ class Controller:
             self.display_text_on_screen(('Your score is ' + str(score)), DISPLAY_X / 2, DISPLAY_Y / 2)
             self.display_text_on_screen('Press space to play again...', DISPLAY_X / 2, (DISPLAY_Y / 2) + self.FONT_SIZE)
 
+# define the grid where the game elements will be
 class Grid:
-    NUM_ROWS = 100
-    NUM_COLS = 100
+    NUM_COLS = 35
+    NUM_ROWS = 35
+    screen = None
+    cell_width = 0
+    cell_height = 0
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, screen) -> None:
+        self.screen = screen
+        # Calculate the size of each grid cell
+        self.cell_width = DISPLAY_X // self.NUM_COLS
+        self.cell_height = DISPLAY_Y // self.NUM_ROWS
+
+    def draw_grid(self):
+        for row in range(self.NUM_ROWS):
+            for column in range(self.NUM_COLS):
+                cell_x = column * self.cell_width
+                cell_y = row * self.cell_height
+                pygame.draw.rect(self.screen, 'white', pygame.Rect(cell_x, cell_y, self.cell_width, self.cell_height), 1)
