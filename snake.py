@@ -51,10 +51,14 @@ class Snake:
             self.dir_x = 0
             self.dir_y = 0
 
+    # transform the position into cells and move the snake there when de direction is changed, 
+    # so it could only move from cell to cell
     def change_raw_dir(self, direction):
         if direction != self.raw_dir:
-            self.pos_x = int(self.pos_x / self.grid.cell_width) * self.grid.cell_width
-            self.pos_y = int(self.pos_y / self.grid.cell_height) * self.grid.cell_height
+            raw_pos_x = round(self.pos_x / self.grid.cell_width)
+            raw_pos_y = round(self.pos_y / self.grid.cell_height)
+            self.pos_x = raw_pos_x * self.grid.cell_width
+            self.pos_y = raw_pos_y * self.grid.cell_height
 
     # set snake speed constant based on the direction given above
     def move(self):
