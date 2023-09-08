@@ -15,6 +15,7 @@ pygame.display.set_caption('snake_game')
 is_running = True
 is_game_over = False
 score = 0
+counter = 0
 
 # game objects setup
 game_ctrl = gb.Controller(screen)
@@ -36,17 +37,26 @@ try:
         # visual objects
         screen.fill('grey')
         grid.draw_grid()
-        # create the snake
-        snake_obj = pygame.Rect(snk.pos_x, snk.pos_y, grid.cell_width, grid.cell_height)
-        pygame.draw.rect(screen, snk.COLOR, snake_obj)
-        snake_collider_box = pygame.Rect(snake_obj)
+        ## create the snake
+        #snake_obj = pygame.Rect(snk.pos_x, snk.pos_y, grid.cell_width, grid.cell_height)
+        #pygame.draw.rect(screen, snk.COLOR, snake_obj)
+        #snake_collider_box = pygame.Rect(snake_obj)
         # create the apple
         apl_obj = pygame.Rect(apl.pos_x, apl.pos_y, grid.cell_width, grid.cell_height)
         pygame.draw.rect(screen, apl.COLOR, apl_obj)
         apple_collider_box = pygame.Rect(apl_obj)
 
+        # set render time
+        counter += 1
+        if counter == 10:
+            snk.move()
+            counter = 0
+
+        # draw snake    
+        snake_head_collider_box = pygame.Rect(snk.draw_head())
+
         # set collisions
-        if snake_collider_box.colliderect(apple_collider_box):
+        if snake_head_collider_box.colliderect(apple_collider_box):
             apl.generate_new_apple_position()
             snk.add_segment_to_body()
             score += 1
@@ -90,9 +100,6 @@ try:
             #snk.change_snake_direction('esc')
             # TODO add pause functions
             pass
-
-        snk.move()
-        snk.draw_body()
 
         # display settings
         pygame.display.flip() # update the display
