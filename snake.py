@@ -110,66 +110,77 @@ class Snake:
             if i == 0:
                 # * print(f'segment0(dir) {segment[0]} segment1(pos_x) {segment[1]} segment2(pos_y) {segment[2]} / last_head_pos_x {self.last_head_pos_x} last_head_pos_y {self.last_head_pos_y}')
                 if segment[E_SEGMENT['dir']] == 'u':
-                    segment[E_SEGMENT['y']] = self.pos_y - self.grid.cell_height
-                    segment[E_SEGMENT['x']] = self.pos_x
-                    if segment[E_SEGMENT['y']] <= self.last_head_pos_y:
-                        segment[E_SEGMENT['dir']] = self.raw_dir
-                        segment[E_SEGMENT['last_y']] = segment[E_SEGMENT['y']]
-                        # * print('raw dir changed', self.raw_dir)
-                if segment[E_SEGMENT['dir']] == 'd':
                     segment[E_SEGMENT['y']] = self.pos_y + self.grid.cell_height
                     segment[E_SEGMENT['x']] = self.pos_x
-                    if segment[E_SEGMENT['y']] >= self.last_head_pos_y:
+                    if (segment[E_SEGMENT['y']] >= self.last_head_pos_y) and (self.raw_dir != segment[E_SEGMENT["dir"]]):
+                        print(f'raw dir changed to {self.raw_dir} and segment dir is {segment[E_SEGMENT["dir"]]} from u')
                         segment[E_SEGMENT['dir']] = self.raw_dir
                         segment[E_SEGMENT['last_y']] = segment[E_SEGMENT['y']]
-                        # * print('raw dir changed', self.raw_dir)
+                        #print(f'raw dir changed to {self.raw_dir} and segment dir is {segment[E_SEGMENT["dir"]]}')
+                if segment[E_SEGMENT['dir']] == 'd':
+                    segment[E_SEGMENT['y']] = self.pos_y - self.grid.cell_height
+                    segment[E_SEGMENT['x']] = self.pos_x
+                    if (segment[E_SEGMENT['y']] <= self.last_head_pos_y) and (self.raw_dir != segment[E_SEGMENT["dir"]]):
+                        print(f'raw dir changed to {self.raw_dir} and segment dir is {segment[E_SEGMENT["dir"]]} from d')
+                        segment[E_SEGMENT['dir']] = self.raw_dir
+                        segment[E_SEGMENT['last_y']] = segment[E_SEGMENT['y']]
+                        #print('raw dir changed', self.raw_dir)
                 if segment[E_SEGMENT['dir']] == 'r':
                     segment[E_SEGMENT['x']] = self.pos_x - self.grid.cell_width
                     segment[E_SEGMENT['y']] = self.pos_y
-                    if segment[E_SEGMENT['x']] <= self.last_head_pos_x:
+                    if (segment[E_SEGMENT['x']] <= self.last_head_pos_x)  and (self.raw_dir != segment[E_SEGMENT["dir"]]):
+                        print(f'raw dir changed to {self.raw_dir} and segment dir is {segment[E_SEGMENT["dir"]]} from r')
                         segment[E_SEGMENT['dir']] = self.raw_dir
                         segment[E_SEGMENT['last_x']] = segment[E_SEGMENT['x']]
-                        # * print('raw dir changed', self.raw_dir)
+                        #print('raw dir changed', self.raw_dir)
                 if segment[E_SEGMENT['dir']] == 'l':
                     segment[E_SEGMENT['x']] = self.pos_x + self.grid.cell_width
                     segment[E_SEGMENT['y']] = self.pos_y
-                    if segment[E_SEGMENT['x']] >= self.last_head_pos_x:
+                    if (segment[E_SEGMENT['x']] >= self.last_head_pos_x) and (self.raw_dir != segment[E_SEGMENT["dir"]]):
+                        print(f'raw dir changed to {self.raw_dir} and segment dir is {segment[E_SEGMENT["dir"]]} from l')
                         segment[E_SEGMENT['dir']] = self.raw_dir
                         segment[E_SEGMENT['last_x']] = segment[E_SEGMENT['x']]
-                        # * print('raw dir changed', self.raw_dir)
+                        #print('raw dir changed', self.raw_dir)
             else:
                 prev_elem = i - 1
+
                 if segment[E_SEGMENT['dir']] == 'u':
-                    segment[E_SEGMENT['y']] = self.body[prev_elem][E_SEGMENT['y']] - self.grid.cell_height
+                    segment[E_SEGMENT['y']] = self.body[prev_elem][E_SEGMENT['y']] + self.grid.cell_height
                     segment[E_SEGMENT['x']] = self.body[prev_elem][E_SEGMENT['x']]
-                    if segment[E_SEGMENT['y']] <= self.body[prev_elem][E_SEGMENT['last_y']]:
-                        segment[E_SEGMENT['dir']] = self.raw_dir
+                    if (segment[E_SEGMENT['y']] >= self.body[prev_elem][E_SEGMENT['last_y']]) and (self.body[prev_elem][E_SEGMENT['dir']] != segment[E_SEGMENT["dir"]]):
+                        segment[E_SEGMENT['dir']] = self.body[prev_elem][E_SEGMENT['dir']]
                         segment[E_SEGMENT['last_y']] = segment[E_SEGMENT['y']]
                         # * print('raw dir changed', self.raw_dir)
                 if segment[E_SEGMENT['dir']] == 'd':
-                    segment[E_SEGMENT['y']] = self.body[prev_elem][E_SEGMENT['y']] + self.grid.cell_height
+                    segment[E_SEGMENT['y']] = self.body[prev_elem][E_SEGMENT['y']] - self.grid.cell_height
                     segment[E_SEGMENT['x']] = self.body[prev_elem][E_SEGMENT['x']]
-                    if segment[E_SEGMENT['y']] >= self.body[prev_elem][E_SEGMENT['last_y']]:
-                        segment[E_SEGMENT['dir']] = self.raw_dir
+                    if (segment[E_SEGMENT['y']] <= self.body[prev_elem][E_SEGMENT['last_y']]) and (self.body[prev_elem][E_SEGMENT['dir']] != segment[E_SEGMENT["dir"]]):
+                        segment[E_SEGMENT['dir']] = self.body[prev_elem][E_SEGMENT['dir']]
                         segment[E_SEGMENT['last_y']] = segment[E_SEGMENT['y']]
                         # * print('raw dir changed', self.raw_dir)
                 if segment[E_SEGMENT['dir']] == 'r':
                     segment[E_SEGMENT['x']] = self.body[prev_elem][E_SEGMENT['x']] - self.grid.cell_width
                     segment[E_SEGMENT['y']] = self.body[prev_elem][E_SEGMENT['y']]
-                    if segment[E_SEGMENT['x']] <= self.body[prev_elem][E_SEGMENT['last_x']]:
-                        segment[E_SEGMENT['dir']] = self.raw_dir
+                    if (segment[E_SEGMENT['x']] <= self.body[prev_elem][E_SEGMENT['last_x']]) and (self.body[prev_elem][E_SEGMENT['dir']] != segment[E_SEGMENT["dir"]]):
+                        segment[E_SEGMENT['dir']] = self.body[prev_elem][E_SEGMENT['dir']]
                         segment[E_SEGMENT['last_x']] = segment[E_SEGMENT['x']]
                         # * print('raw dir changed', self.raw_dir)
                 if segment[E_SEGMENT['dir']] == 'l':
                     segment[E_SEGMENT['x']] = self.body[prev_elem][E_SEGMENT['x']] + self.grid.cell_width
                     segment[E_SEGMENT['y']] = self.body[prev_elem][E_SEGMENT['y']]
-                    if segment[E_SEGMENT['x']] >= self.body[prev_elem][E_SEGMENT['last_x']]:
-                        segment[E_SEGMENT['dir']] = self.raw_dir
+                    if (segment[E_SEGMENT['x']] >= self.body[prev_elem][E_SEGMENT['last_x']]) and (self.body[prev_elem][E_SEGMENT['dir']] != segment[E_SEGMENT["dir"]]):
+                        segment[E_SEGMENT['dir']] = self.body[prev_elem][E_SEGMENT['dir']]
                         segment[E_SEGMENT['last_x']] = segment[E_SEGMENT['x']]
                         # * print('raw dir changed', self.raw_dir)
             snake_obj = pygame.Rect(segment[E_SEGMENT['x']], segment[E_SEGMENT['y']], self.grid.cell_width, self.grid.cell_height)
-            pygame.draw.rect(self.screen, self.COLOR, snake_obj)
+            pygame.draw.rect(self.screen, 'blue', snake_obj)
             #snake_collider_box = pygame.Rect(snake_obj)
+
+    def add_segment_to_body(self):
+        last_i = len(self.body) - 1
+        last_seg_dir = self.body[last_i][E_SEGMENT['dir']]
+        new_segment = [last_seg_dir,0,0,0,0]
+        self.body.append(new_segment)
 
     # set snake speed constant based on the direction given above
     def move(self):

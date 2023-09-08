@@ -48,6 +48,7 @@ try:
         # set collisions
         if snake_collider_box.colliderect(apple_collider_box):
             apl.generate_new_apple_position()
+            snk.add_segment_to_body()
             score += 1
 
         # Check for collisions with the borders
