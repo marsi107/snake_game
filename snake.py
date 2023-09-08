@@ -4,6 +4,12 @@ import pygame
 
 import math # to round up and down the raw directions for positioning
 
+E_SEGMENT = {
+        'dir': 0,
+        'x': 1,
+        'y': 2
+    }
+
 class Snake:
     COLOR = 'yellow'
     INTIAL_POS_X = 7
@@ -11,6 +17,7 @@ class Snake:
     SPEED = 1
     INTIAL_DIR_X = 2
     INTIAL_DIR_Y = 0
+    
     screen = None
     grid = None
     raw_dir = 'r'
@@ -100,33 +107,57 @@ class Snake:
         for i, segment in enumerate(self.body):
             if i == 0:
                 # * print(f'segment0(dir) {segment[0]} segment1(pos_x) {segment[1]} segment2(pos_y) {segment[2]} / last_head_pos_x {self.last_head_pos_x} last_head_pos_y {self.last_head_pos_y}')
-                if segment[0] == 'u':
-                    segment[2] = self.pos_y - self.grid.cell_height
-                    segment[1] = self.pos_x
-                    if segment[2] <= self.last_head_pos_y:
-                        segment[0] = self.raw_dir
+                if segment[E_SEGMENT['dir']] == 'u':
+                    segment[E_SEGMENT['y']] = self.pos_y - self.grid.cell_height
+                    segment[E_SEGMENT['x']] = self.pos_x
+                    if segment[E_SEGMENT['y']] <= self.last_head_pos_y:
+                        segment[E_SEGMENT['dir']] = self.raw_dir
                         # * print('raw dir changed', self.raw_dir)
-                if segment[0] == 'd':
-                    segment[2] = self.pos_y + self.grid.cell_height
-                    segment[1] = self.pos_x
-                    if segment[2] >= self.last_head_pos_y:
-                        segment[0] = self.raw_dir
+                if segment[E_SEGMENT['dir']] == 'd':
+                    segment[E_SEGMENT['y']] = self.pos_y + self.grid.cell_height
+                    segment[E_SEGMENT['x']] = self.pos_x
+                    if segment[E_SEGMENT['y']] >= self.last_head_pos_y:
+                        segment[E_SEGMENT['dir']] = self.raw_dir
                         # * print('raw dir changed', self.raw_dir)
-                if segment[0] == 'r':
-                    segment[1] = self.pos_x - self.grid.cell_width
-                    segment[2] = self.pos_y
-                    if segment[1] <= self.last_head_pos_x:
-                        segment[0] = self.raw_dir
+                if segment[E_SEGMENT['dir']] == 'r':
+                    segment[E_SEGMENT['x']] = self.pos_x - self.grid.cell_width
+                    segment[E_SEGMENT['y']] = self.pos_y
+                    if segment[E_SEGMENT['x']] <= self.last_head_pos_x:
+                        segment[E_SEGMENT['dir']] = self.raw_dir
                         # * print('raw dir changed', self.raw_dir)
-                if segment[0] == 'l':
-                    segment[1] = self.pos_x + self.grid.cell_width
-                    segment[2] = self.pos_y
-                    if segment[1] >= self.last_head_pos_x:
-                        segment[0] = self.raw_dir
+                if segment[E_SEGMENT['dir']] == 'l':
+                    segment[E_SEGMENT['x']] = self.pos_x + self.grid.cell_width
+                    segment[E_SEGMENT['y']] = self.pos_y
+                    if segment[E_SEGMENT['x']] >= self.last_head_pos_x:
+                        segment[E_SEGMENT['dir']] = self.raw_dir
                         # * print('raw dir changed', self.raw_dir)
             else:
-                pass
-            snake_obj = pygame.Rect(segment[1], segment[2], self.grid.cell_width, self.grid.cell_height)
+                prev_elem = i - 1
+                if segment[E_SEGMENT['dir']] == 'u':
+                    segment[E_SEGMENT['y']] = self.body[prev_elem][E_SEGMENT['y']] - self.grid.cell_height
+                    segment[E_SEGMENT['x']] = self.body[prev_elem][E_SEGMENT['x']]
+                    if segment[E_SEGMENT['y']] <= self.last_head_pos_y:
+                        segment[E_SEGMENT['dir']] = self.raw_dir
+                        # * print('raw dir changed', self.raw_dir)
+                if segment[E_SEGMENT['dir']] == 'd':
+                    segment[E_SEGMENT['y']] = self.body[prev_elem][E_SEGMENT['y']] + self.grid.cell_height
+                    segment[E_SEGMENT['x']] = self.body[prev_elem][E_SEGMENT['x']]
+                    if segment[E_SEGMENT['y']] >= self.last_head_pos_y:
+                        segment[E_SEGMENT['dir']] = self.raw_dir
+                        # * print('raw dir changed', self.raw_dir)
+                if segment[E_SEGMENT['dir']] == 'r':
+                    segment[E_SEGMENT['x']] = self.body[prev_elem][E_SEGMENT['x']] - self.grid.cell_width
+                    segment[E_SEGMENT['y']] = self.body[prev_elem][E_SEGMENT['y']]
+                    if segment[E_SEGMENT['x']] <= self.last_head_pos_x:
+                        segment[E_SEGMENT['dir']] = self.raw_dir
+                        # * print('raw dir changed', self.raw_dir)
+                if segment[E_SEGMENT['dir']] == 'l':
+                    segment[E_SEGMENT['x']] = self.body[prev_elem][E_SEGMENT['x']] + self.grid.cell_width
+                    segment[E_SEGMENT['y']] = self.body[prev_elem][E_SEGMENT['y']]
+                    if segment[E_SEGMENT['x']] >= self.last_head_pos_x:
+                        segment[E_SEGMENT['dir']] = self.raw_dir
+                        # * print('raw dir changed', self.raw_dir)
+            snake_obj = pygame.Rect(segment[E_SEGMENT['x']], segment[E_SEGMENT['y']], self.grid.cell_width, self.grid.cell_height)
             pygame.draw.rect(self.screen, self.COLOR, snake_obj)
             #snake_collider_box = pygame.Rect(snake_obj)
 
