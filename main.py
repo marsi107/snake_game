@@ -53,16 +53,16 @@ try:
         # Check for collisions with the borders
         if snk.pos_x < 0:
             is_game_over = True
-            snk.change_snake_direction('esc')
+            snk.change_direction('esc')
         if snk.pos_x > gb.DISPLAY_X - grid.cell_height:
             is_game_over = True
-            snk.change_snake_direction('esc')
+            snk.change_direction('esc')
         if snk.pos_y < 0:
             is_game_over = True
-            snk.change_snake_direction('esc')
+            snk.change_direction('esc')
         if snk.pos_y > gb.DISPLAY_Y - grid.cell_width:
             is_game_over = True
-            snk.change_snake_direction('esc')
+            snk.change_direction('esc')
 
         # behavior when is game over
         game_ctrl.game_over_display(is_game_over, str(score))
@@ -70,13 +70,13 @@ try:
         # keyboard reading
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w] or keys[pygame.K_UP]:
-            snk.change_snake_direction('u')
+            snk.change_direction('u')
         elif keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            snk.change_snake_direction('d')
+            snk.change_direction('d')
         elif keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            snk.change_snake_direction('l')
+            snk.change_direction('l')
         elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            snk.change_snake_direction('r')
+            snk.change_direction('r')
         elif keys[pygame.K_SPACE]:
             if is_game_over:
                 is_game_over = False
