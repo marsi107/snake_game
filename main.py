@@ -1,7 +1,6 @@
 import pygame # for game features
 
 import sys
-import random
 
 import game_board as gb
 from snake import Snake
@@ -38,10 +37,7 @@ try:
         # visual objects
         screen.fill('grey')
         grid.draw_grid()
-        ## create the snake
-        #snake_obj = pygame.Rect(snk.pos_x, snk.pos_y, grid.cell_width, grid.cell_height)
-        #pygame.draw.rect(screen, snk.COLOR, snake_obj)
-        #snake_collider_box = pygame.Rect(snake_obj)
+
         # create the apple
         apl_obj = pygame.Rect(apl.pos_x, apl.pos_y, grid.cell_width, grid.cell_height)
         pygame.draw.rect(screen, apl.COLOR, apl_obj)
@@ -54,14 +50,20 @@ try:
             counter = 0
 
         # draw snake    
-        snake_head_collider_box = pygame.Rect(snk.draw_head())
-        snk.draw_body()
+        snake_head_collider_box = snk.draw_head()
+        snake_body_collider_box_list = snk.draw_body()
 
         # set collisions
         if snake_head_collider_box.colliderect(apple_collider_box):
             apl.generate_new_apple_position()
             snk.add_segment_to_body()
             score += 1
+        
+        # check collision hed to body
+        for segment_collider in snake_body_collider_box_list:
+            if snake_head_collider_box.colliderect(segment_collider):
+                is_game_over = True
+                snk.is_moving = False
 
         # Check for collisions with the borders
         if snk.pos_x < 0:

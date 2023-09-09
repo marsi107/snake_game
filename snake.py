@@ -56,8 +56,10 @@ class Snake:
         self.body.append(new_segment)
 
     def move(self):
+        # check if the sanke is moving
         if not self.is_moving:
             return
+        
         # update body pos
         for i, segment in enumerate(self.body):
             segment[E_SEGMENT['x_to_pass']] = segment[E_SEGMENT['x']]
@@ -85,17 +87,19 @@ class Snake:
         transformed_pos_y = self.pos_y * self.grid.cell_height
         snake_obj = pygame.Rect(transformed_pos_x, transformed_pos_y, self.grid.cell_width, self.grid.cell_height)
         pygame.draw.rect(self.screen, self.HEAD_COLOR, snake_obj)
-        snake_collider_box = pygame.Rect(snake_obj)
-        return snake_collider_box
+        head_collider_box = pygame.Rect(snake_obj)
+        return head_collider_box
     
     def draw_body(self):
+        body_collider_box_list = []
         for segment in self.body:
             transformed_pos_x = segment[E_SEGMENT['x']] * self.grid.cell_width
             transformed_pos_y = segment[E_SEGMENT['y']] * self.grid.cell_height
             snake_obj = pygame.Rect(transformed_pos_x, transformed_pos_y, self.grid.cell_width, self.grid.cell_height)
             pygame.draw.rect(self.screen, self.BODY_COLOR, snake_obj)
-            snake_collider_box = pygame.Rect(snake_obj)
-
+            body_collider_box_list.append(pygame.Rect(snake_obj))
+        return body_collider_box_list
+            
     # reset all parameters
     def reset(self):
         self.pos_x = self.INTIAL_POS_X
