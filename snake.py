@@ -55,17 +55,23 @@ class Snake:
         last_seg_dir = self.body[last_i][E_SEGMENT['dir']]
         last_seg_pos_x = self.body[last_i][E_SEGMENT['x']]
         last_seg_pos_y = self.body[last_i][E_SEGMENT['y']]
+
+        if self.is_debug_mode:
+            pass
+            #print(f'before Add segment with last_seg_pos_x {last_seg_pos_x} and last_seg_pos_y {last_seg_pos_y}')
+
         if last_seg_dir == 'u':
             last_seg_pos_y += 1
         if last_seg_dir == 'd':
             last_seg_pos_y -= 1
         if last_seg_dir == 'l':
-            last_seg_pos_x -= 1
-        if last_seg_dir == 'r':
             last_seg_pos_x += 1
+        if last_seg_dir == 'r':
+            last_seg_pos_x -= 1
 
         if self.is_debug_mode:
-            print(f'Add segment with last_seg_pos_x {last_seg_pos_x} and last_seg_pos_y {last_seg_pos_y}')
+            pass
+            #print(f'after Add segment with last_seg_pos_x {last_seg_pos_x} and last_seg_pos_y {last_seg_pos_y}')
 
         last_seg_last_dir = self.body[last_i][E_SEGMENT['last_dir']]
         last_seg_last_pos_x = self.body[last_i][E_SEGMENT['last_x']]
@@ -108,7 +114,7 @@ class Snake:
                     segment[E_SEGMENT['last_x']] = self.body[prev_elem][E_SEGMENT['last_x']]
                     segment[E_SEGMENT['last_y']] = self.body[prev_elem][E_SEGMENT['last_y']]
             if self.is_debug_mode:
-                print(f'segment {i} dir {segment[E_SEGMENT["dir"]]}')
+                print(f'segment {i} dir {segment[E_SEGMENT["dir"]]} pos_x {segment[E_SEGMENT["x"]]} and pos_y {segment[E_SEGMENT["y"]]}')
                 #pass
 
     def draw_head(self):
