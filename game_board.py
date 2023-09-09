@@ -15,7 +15,7 @@ class Controller:
         self.font = pygame.font.Font(None, self.FONT_SIZE) # set font to None  to use system default font
 
     def display_text_on_screen(self, text, pos_x, pos_y):
-        txt = self.font.render(text, True, (255, 255, 255))
+        txt = self.font.render(text, True, (0, 0, 0))
         txt_rect = txt.get_rect()
         txt_rect.center = (pos_x, pos_y)
         self.screen.blit(txt, txt_rect)
@@ -26,6 +26,11 @@ class Controller:
             self.display_text_on_screen('Game Over.', DISPLAY_X / 2, (DISPLAY_Y / 2) - self.FONT_SIZE)
             self.display_text_on_screen(('Your score is ' + str(score)), DISPLAY_X / 2, DISPLAY_Y / 2)
             self.display_text_on_screen('Press space to play again...', DISPLAY_X / 2, (DISPLAY_Y / 2) + self.FONT_SIZE)
+
+    def pause_display(self, is_paused):
+        if is_paused:
+            self.display_text_on_screen('Pause', DISPLAY_X / 2, (DISPLAY_Y / 2) - self.FONT_SIZE)
+            self.display_text_on_screen('Press space to resume...', DISPLAY_X / 2, (DISPLAY_Y / 2) + self.FONT_SIZE)
 
 # define the grid where the game elements will be
 class Grid:

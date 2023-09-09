@@ -14,6 +14,7 @@ pygame.display.set_caption('snake_game')
 is_running = True
 is_debug_mode = False
 is_game_over = False
+is_paused = False
 score = 0
 counter = 0
 
@@ -38,7 +39,7 @@ try:
         screen.fill('grey')
         grid.draw_grid()
 
-        # create the apple
+        # draw the apple
         apl_obj = pygame.Rect(apl.pos_x, apl.pos_y, grid.cell_width, grid.cell_height)
         pygame.draw.rect(screen, apl.COLOR, apl_obj)
         apple_collider_box = pygame.Rect(apl_obj)
@@ -81,6 +82,7 @@ try:
 
         # behavior when is game over
         game_ctrl.game_over_display(is_game_over, str(score))
+        game_ctrl.pause_display(is_paused)
 
         # keyboard reading
         keys = pygame.key.get_pressed()
@@ -98,12 +100,11 @@ try:
                 score = 0
                 reset_game()
             else:
-                # TODO add resume functions
-                pass
+                is_paused = False
+                snk.is_moving = True
         elif keys[pygame.K_ESCAPE]:
-            #snk.change_snake_direction('esc')
-            # TODO add pause functions
-            pass
+            is_paused = True
+            snk.is_moving = False
 
         # display settings
         pygame.display.flip() # update the display
