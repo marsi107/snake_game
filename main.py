@@ -66,16 +66,16 @@ try:
         # Check for collisions with the borders
         if snk.pos_x < 0:
             is_game_over = True
-            snk.change_direction('esc')
-        if snk.pos_x > gb.DISPLAY_X - grid.cell_height:
+            snk.is_moving = False
+        if snk.pos_x >= grid.NUM_COLS:
             is_game_over = True
-            snk.change_direction('esc')
+            snk.is_moving = False
         if snk.pos_y < 0:
             is_game_over = True
-            snk.change_direction('esc')
-        if snk.pos_y > gb.DISPLAY_Y - grid.cell_width:
+            snk.is_moving = False
+        if snk.pos_y >= grid.NUM_ROWS:
             is_game_over = True
-            snk.change_direction('esc')
+            snk.is_moving = False
 
         # behavior when is game over
         game_ctrl.game_over_display(is_game_over, str(score))

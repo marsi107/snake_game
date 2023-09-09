@@ -29,6 +29,7 @@ class Snake:
     pos_x, pos_y = 0, 0
     dir = INITIAL_DIR
     opposite_dir = 'l'
+    is_moving = True
     body = None
 
     def __init__(self, screen, grid, is_debug_mode = False):
@@ -55,6 +56,8 @@ class Snake:
         self.body.append(new_segment)
 
     def move(self):
+        if not self.is_moving:
+            return
         # update body pos
         for i, segment in enumerate(self.body):
             segment[E_SEGMENT['x_to_pass']] = segment[E_SEGMENT['x']]
@@ -99,6 +102,7 @@ class Snake:
         self.pos_y = self.INTIAL_POS_Y
         self.dir = self.INITIAL_DIR
         self.opposite_dir = E_DIR_TO_OPOSSITE_DIR[self.INITIAL_DIR]
+        self.is_moving = True
         self.body = [
             [(self.INTIAL_POS_X-1), self.INTIAL_POS_Y, 0, 0],
             [(self.INTIAL_POS_X-2), self.INTIAL_POS_Y, 0, 0]
