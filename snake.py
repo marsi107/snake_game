@@ -6,9 +6,9 @@ E_SEGMENT = {
     'dir': 0,
     'x': 1,
     'y': 2,
-    'last_dir': 3,
-    'last_x': 4,
-    'last_y': 5
+    'new_dir': 3,
+    'last_pos_x_dir_changed': 4,
+    'last_pos_y_dir_changed': 5
     
 }
 E_DIR_TO_OPOSSITE_DIR = {
@@ -44,9 +44,9 @@ class Snake:
         if direction == self.opposite_dir:
             return
         if direction != self.dir:
-            self.body[0][E_SEGMENT['last_dir']] = direction
-            self.body[0][E_SEGMENT['last_x']] = self.pos_x
-            self.body[0][E_SEGMENT['last_y']] = self.pos_y
+            self.body[0][E_SEGMENT['new_dir']] = direction
+            self.body[0][E_SEGMENT['last_pos_x_dir_changed']] = self.pos_x
+            self.body[0][E_SEGMENT['last_pos_y_dir_changed']] = self.pos_y
         self.dir = direction
         self.opposite_dir = E_DIR_TO_OPOSSITE_DIR[direction]
 
@@ -73,9 +73,9 @@ class Snake:
             pass
             #print(f'after Add segment with last_seg_pos_x {last_seg_pos_x} and last_seg_pos_y {last_seg_pos_y}')
 
-        last_seg_last_dir = self.body[last_i][E_SEGMENT['last_dir']]
-        last_seg_last_pos_x = self.body[last_i][E_SEGMENT['last_x']]
-        last_seg_last_pos_y = self.body[last_i][E_SEGMENT['last_y']]
+        last_seg_last_dir = self.body[last_i][E_SEGMENT['new_dir']]
+        last_seg_last_pos_x = self.body[last_i][E_SEGMENT['last_pos_x_dir_changed']]
+        last_seg_last_pos_y = self.body[last_i][E_SEGMENT['last_pos_y_dir_changed']]
         new_segment = [last_seg_dir, last_seg_pos_x, last_seg_pos_y, last_seg_last_dir, last_seg_last_pos_x, last_seg_last_pos_y]
         self.body.append(new_segment)
 
@@ -104,18 +104,19 @@ class Snake:
             if segment[E_SEGMENT['dir']] == 'r':
                 segment[E_SEGMENT['x']] += 1
 
-            if i == 0:
-                segment[E_SEGMENT['dir']] = self.dir
-            else:
-                prev_elem = i - 1
-                if (segment[E_SEGMENT['x']] == segment[E_SEGMENT['last_x']]) or (segment[E_SEGMENT['y']] == segment[E_SEGMENT['last_y']]):
-                    segment[E_SEGMENT['dir']] = segment[E_SEGMENT['last_dir']]
-                    segment[E_SEGMENT['last_dir']] = self.body[prev_elem][E_SEGMENT['last_dir']]
-                    segment[E_SEGMENT['last_x']] = self.body[prev_elem][E_SEGMENT['last_x']]
-                    segment[E_SEGMENT['last_y']] = self.body[prev_elem][E_SEGMENT['last_y']]
+            if segment[E_SEGMENT['dir']] != segment[E_SEGMENT['new_dir']]:
+                if (segment[E_SEGMENT['x']] == segment[E_SEGMENT['last_pos_x_dir_changed']]) and (segment[E_SEGMENT['y']] == segment[E_SEGMENT['last_pos_y_dir_changed']]):
+                    segment[E_SEGMENT['dir']] = segment[E_SEGMENT['new_dir']]
+                    next_elem = i + 1
+                    body_lenght = len(self.body) - 1
+                    if next_elem <= body_lenght:
+                        self.body[next_elem][E_SEGMENT['new_dir']] = segment[E_SEGMENT['new_dir']]
+                        self.body[next_elem][E_SEGMENT['last_pos_x_dir_changed']] = segment[E_SEGMENT['last_pos_x_dir_changed']]
+                        self.body[next_elem][E_SEGMENT['last_pos_y_dir_changed']] = segment[E_SEGMENT['last_pos_y_dir_changed']]
+
             if self.is_debug_mode:
-                print(f'segment {i} dir {segment[E_SEGMENT["dir"]]} pos_x {segment[E_SEGMENT["x"]]} and pos_y {segment[E_SEGMENT["y"]]}')
-                #pass
+                #print(f'segment {i} dir {segment[E_SEGMENT["dir"]]} pos_x {segment[E_SEGMENT["x"]]} and pos_y {segment[E_SEGMENT["y"]]}')
+                pass
 
     def draw_head(self):
         transformed_pos_x = self.pos_x * self.grid.cell_width
