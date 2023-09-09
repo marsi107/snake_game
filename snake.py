@@ -8,8 +8,10 @@ E_SEGMENT = {
     'dir': 0,
     'x': 1,
     'y': 2,
-    'last_x': 3,
-    'last_y': 4
+    'last_dir': 3,
+    'last_x': 4,
+    'last_y': 5
+    
 }
 E_DIR_TO_OPOSSITE_DIR = {
     'u': 'd',
@@ -41,6 +43,11 @@ class Snake:
         # guardian to control that the snake doesn't go backwards
         if direction == self.opposite_dir:
             return
+        if direction != self.dir:
+            #self.body[0][E_SEGMENT['dir']] = direction
+            self.body[0][E_SEGMENT['last_dir']] = direction
+            self.body[0][E_SEGMENT['last_x']] = self.pos_x
+            self.body[0][E_SEGMENT['last_y']] = self.pos_y
         self.dir = direction
         self.opposite_dir = E_DIR_TO_OPOSSITE_DIR[direction]
 
@@ -49,7 +56,10 @@ class Snake:
         last_seg_dir = self.body[last_i][E_SEGMENT['dir']]
         last_seg_pos_x = self.body[last_i][E_SEGMENT['x']]
         last_seg_pos_y = self.body[last_i][E_SEGMENT['y']]
-        new_segment = [last_seg_dir, last_seg_pos_x, last_seg_pos_y, 0,0]
+        last_seg_last_dir = self.body[last_i][E_SEGMENT['last_dir']]
+        last_seg_last_pos_x = self.body[last_i][E_SEGMENT['last_x']]
+        last_seg_last_pos_y = self.body[last_i][E_SEGMENT['last_y']]
+        new_segment = [last_seg_dir, last_seg_pos_x, last_seg_pos_y, last_seg_last_dir, last_seg_last_pos_x, last_seg_last_pos_y]
         self.body.append(new_segment)
 
     def move(self):
@@ -75,23 +85,16 @@ class Snake:
                 segment[E_SEGMENT['x']] += 1
 
             if i == 0:
-                if segment[E_SEGMENT['x']] == segment[E_SEGMENT['last_x']]:
-                    segment[E_SEGMENT['last_x']] = self.pos_x
-                    segment[E_SEGMENT['dir']] = self.dir
-                    
-                if segment[E_SEGMENT['y']] == segment[E_SEGMENT['last_y']]:
-                    segment[E_SEGMENT['last_y']] = self.pos_y
-                    segment[E_SEGMENT['dir']] = self.dir
+                segment[E_SEGMENT['dir']] = self.dir
             else:
                 prev_elem = i - 1
                 # TODO save the last direction changed with the postion to just change the direction there
                 # TODO instead of always
-                if segment[E_SEGMENT['x']] == segment[E_SEGMENT['last_x']]:
-                    segment[E_SEGMENT['last_x']] = self.body[prev_elem][E_SEGMENT['x']]
-                    segment[E_SEGMENT['dir']] = self.body[prev_elem][E_SEGMENT['dir']]
-                if segment[E_SEGMENT['y']] == segment[E_SEGMENT['last_y']]:
-                    segment[E_SEGMENT['last_y']] = self.body[prev_elem][E_SEGMENT['y']]
-                    segment[E_SEGMENT['dir']] = self.body[prev_elem][E_SEGMENT['dir']]
+                if (segment[E_SEGMENT['x']] == segment[E_SEGMENT['last_x']]) or (segment[E_SEGMENT['y']] == segment[E_SEGMENT['last_y']]):
+                    segment[E_SEGMENT['dir']] = segment[E_SEGMENT['last_dir']]
+                    segment[E_SEGMENT['last_dir']] = self.body[prev_elem][E_SEGMENT['last_dir']]
+                    segment[E_SEGMENT['last_x']] = self.body[prev_elem][E_SEGMENT['last_x']]
+                    segment[E_SEGMENT['last_y']] = self.body[prev_elem][E_SEGMENT['last_y']]
 
 
                     
@@ -122,6 +125,6 @@ class Snake:
         self.dir = self.INITIAL_DIR
         self.opposite_dir = 'l'
         self.body = [
-            [self.INITIAL_DIR, (self.INTIAL_POS_X-1), self.INTIAL_POS_Y, self.INTIAL_POS_X, self.INTIAL_POS_Y],
-            [self.INITIAL_DIR, (self.INTIAL_POS_X-2), self.INTIAL_POS_Y, self.INTIAL_POS_X-1, self.INTIAL_POS_Y]
+            [self.INITIAL_DIR, (self.INTIAL_POS_X-1), self.INTIAL_POS_Y, self.INITIAL_DIR, self.INTIAL_POS_X, self.INTIAL_POS_Y],
+            [self.INITIAL_DIR, (self.INTIAL_POS_X-2), self.INTIAL_POS_Y, self.INITIAL_DIR, self.INTIAL_POS_X-1, self.INTIAL_POS_Y]
             ]
