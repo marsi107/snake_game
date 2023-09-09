@@ -46,7 +46,6 @@ class Snake:
             if self.is_debug_mode:
                 print(f'changed direction from {self.dir} to {direction}')
             self.dir = direction
-            self.opposite_dir = E_DIR_TO_OPOSSITE_DIR[direction]
 
     def add_segment_to_body(self):
         last_i = len(self.body) - 1
@@ -81,6 +80,7 @@ class Snake:
             self.pos_x -= 1
         if self.dir == 'r':
             self.pos_x += 1
+        self.opposite_dir = E_DIR_TO_OPOSSITE_DIR[self.dir]
 
     def draw_head(self):
         transformed_pos_x = self.pos_x * self.grid.cell_width

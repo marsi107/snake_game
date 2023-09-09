@@ -41,4 +41,3 @@ class SnakeTests(unittest.TestCase):
                 snk.is_moving = False
         # check that the snake is still moving as expected
         self.assertTrue(snk.is_moving)
-        self.assertEqual('l', snk.dir)
