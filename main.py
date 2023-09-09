@@ -13,7 +13,7 @@ screen = pygame.display.set_mode((gb.DISPLAY_X, gb.DISPLAY_Y)) # define the scre
 clock = pygame.time.Clock()
 pygame.display.set_caption('snake_game')
 is_running = True
-is_debug_mode = True
+is_debug_mode = False
 is_game_over = False
 score = 0
 counter = 0
