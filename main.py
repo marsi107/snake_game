@@ -22,7 +22,7 @@ counter = 0
 game_ctrl = gb.Controller(screen)
 grid = gb.Grid(screen)
 snk = Snake(screen, grid, is_debug_mode)
-apl = Apple(grid)
+apl = Apple(screen, grid)
 
 def reset_game():
     snk.reset()
@@ -40,9 +40,7 @@ try:
         grid.draw_grid()
 
         # draw the apple
-        apl_obj = pygame.Rect(apl.pos_x, apl.pos_y, grid.cell_width, grid.cell_height)
-        pygame.draw.rect(screen, apl.COLOR, apl_obj)
-        apple_collider_box = pygame.Rect(apl_obj)
+        apple_collider_box = apl.draw()
 
         # set render time
         counter += 1
@@ -65,6 +63,8 @@ try:
             if snake_head_collider_box.colliderect(segment_collider):
                 is_game_over = True
                 snk.is_moving = False
+            if apple_collider_box.colliderect(segment_collider):
+                apl.generate_new_apple_position()
 
         # Check for collisions with the borders
         if snk.pos_x < 0:
