@@ -54,6 +54,7 @@ try:
 
         # draw snake    
         snake_head_collider_box = pygame.Rect(snk.draw_head())
+        snk.draw_body()
 
         # set collisions
         if snake_head_collider_box.colliderect(apple_collider_box):

@@ -47,11 +47,13 @@ class Snake:
     def add_segment_to_body(self):
         last_i = len(self.body) - 1
         last_seg_dir = self.body[last_i][E_SEGMENT['dir']]
-        new_segment = [last_seg_dir,0,0,0,0]
+        last_seg_pos_x = self.body[last_i][E_SEGMENT['x']]
+        last_seg_pos_y = self.body[last_i][E_SEGMENT['y']]
+        new_segment = [last_seg_dir, last_seg_pos_x, last_seg_pos_y, 0,0]
         self.body.append(new_segment)
 
-    # set snake speed constant based on the direction given above
     def move(self):
+        # update head pos
         if self.dir == 'u':
             self.pos_y -= 1
         if self.dir == 'd':
@@ -60,8 +62,42 @@ class Snake:
             self.pos_x -= 1
         if self.dir == 'r':
             self.pos_x += 1
-        print('snake_pos_x', self.pos_x)
-        print('snake_pos_y', self.pos_y)
+
+        # update body pos
+        for i, segment in enumerate(self.body):
+            if segment[E_SEGMENT['dir']] == 'u':
+                segment[E_SEGMENT['y']] -= 1
+            if segment[E_SEGMENT['dir']] == 'd':
+                segment[E_SEGMENT['y']] += 1
+            if segment[E_SEGMENT['dir']] == 'l':
+                segment[E_SEGMENT['x']] -= 1
+            if segment[E_SEGMENT['dir']] == 'r':
+                segment[E_SEGMENT['x']] += 1
+
+            if i == 0:
+                if segment[E_SEGMENT['x']] == segment[E_SEGMENT['last_x']]:
+                    segment[E_SEGMENT['last_x']] = self.pos_x
+                    segment[E_SEGMENT['dir']] = self.dir
+                    
+                if segment[E_SEGMENT['y']] == segment[E_SEGMENT['last_y']]:
+                    segment[E_SEGMENT['last_y']] = self.pos_y
+                    segment[E_SEGMENT['dir']] = self.dir
+            else:
+                prev_elem = i - 1
+                # TODO save the last direction changed with the postion to just change the direction there
+                # TODO instead of always
+                if segment[E_SEGMENT['x']] == segment[E_SEGMENT['last_x']]:
+                    segment[E_SEGMENT['last_x']] = self.body[prev_elem][E_SEGMENT['x']]
+                    segment[E_SEGMENT['dir']] = self.body[prev_elem][E_SEGMENT['dir']]
+                if segment[E_SEGMENT['y']] == segment[E_SEGMENT['last_y']]:
+                    segment[E_SEGMENT['last_y']] = self.body[prev_elem][E_SEGMENT['y']]
+                    segment[E_SEGMENT['dir']] = self.body[prev_elem][E_SEGMENT['dir']]
+
+
+                    
+            print(f'segment {i} dir {segment[E_SEGMENT["dir"]]}')
+        #print('snake_pos_x', self.pos_x)
+        #print('snake_pos_y', self.pos_y)
 
     def draw_head(self):
         transformed_pos_x = self.pos_x * self.grid.cell_width
@@ -70,6 +106,14 @@ class Snake:
         pygame.draw.rect(self.screen, self.HEAD_COLOR, snake_obj)
         snake_collider_box = pygame.Rect(snake_obj)
         return snake_collider_box
+    
+    def draw_body(self):
+        for segment in self.body:
+            transformed_pos_x = segment[E_SEGMENT['x']] * self.grid.cell_width
+            transformed_pos_y = segment[E_SEGMENT['y']] * self.grid.cell_height
+            snake_obj = pygame.Rect(transformed_pos_x, transformed_pos_y, self.grid.cell_width, self.grid.cell_height)
+            pygame.draw.rect(self.screen, self.BODY_COLOR, snake_obj)
+            snake_collider_box = pygame.Rect(snake_obj)
 
     # reset all parameters
     def reset(self):
