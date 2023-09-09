@@ -10,6 +10,7 @@ The game consists in keeping the snake alive as long as possible while eating th
 ## Dependencies to clone the repository
 - Install python
 - Install pygame
+- Install pyinstaller
 
 ## Documentation used
 - https://www.pygame.org/docs/

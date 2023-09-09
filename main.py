@@ -60,7 +60,7 @@ try:
             snk.add_segment_to_body()
             score += 1
         
-        # check collision hed to body
+        # check collision head to body
         for segment_collider in snake_body_collider_box_list:
             if snake_head_collider_box.colliderect(segment_collider):
                 is_game_over = True
