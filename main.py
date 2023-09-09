@@ -13,6 +13,7 @@ screen = pygame.display.set_mode((gb.DISPLAY_X, gb.DISPLAY_Y)) # define the scre
 clock = pygame.time.Clock()
 pygame.display.set_caption('snake_game')
 is_running = True
+is_debug_mode = True
 is_game_over = False
 score = 0
 counter = 0
@@ -20,7 +21,7 @@ counter = 0
 # game objects setup
 game_ctrl = gb.Controller(screen)
 grid = gb.Grid(screen)
-snk = Snake(screen, grid)
+snk = Snake(screen, grid, is_debug_mode)
 apl = Apple(grid)
 
 def reset_game():

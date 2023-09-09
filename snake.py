@@ -2,8 +2,6 @@
 
 import pygame
 
-import math # to round up and down the raw directions for positioning
-
 E_SEGMENT = {
     'dir': 0,
     'x': 1,
@@ -29,14 +27,16 @@ class Snake:
     
     screen = None
     grid = None
+    is_debug_mode = False
     pos_x, pos_y = 0, 0
     dir = INITIAL_DIR
     opposite_dir = 'l'
     body = None
 
-    def __init__(self, screen, grid):
+    def __init__(self, screen, grid, is_debug_mode = False):
         self.screen = screen
         self.grid = grid
+        self.is_debug_mode = is_debug_mode
         self.reset()
 
     def change_direction(self, direction):
@@ -44,7 +44,6 @@ class Snake:
         if direction == self.opposite_dir:
             return
         if direction != self.dir:
-            #self.body[0][E_SEGMENT['dir']] = direction
             self.body[0][E_SEGMENT['last_dir']] = direction
             self.body[0][E_SEGMENT['last_x']] = self.pos_x
             self.body[0][E_SEGMENT['last_y']] = self.pos_y
@@ -56,6 +55,18 @@ class Snake:
         last_seg_dir = self.body[last_i][E_SEGMENT['dir']]
         last_seg_pos_x = self.body[last_i][E_SEGMENT['x']]
         last_seg_pos_y = self.body[last_i][E_SEGMENT['y']]
+        if last_seg_dir == 'u':
+            last_seg_pos_y += 1
+        if last_seg_dir == 'd':
+            last_seg_pos_y -= 1
+        if last_seg_dir == 'l':
+            last_seg_pos_x -= 1
+        if last_seg_dir == 'r':
+            last_seg_pos_x += 1
+
+        if self.is_debug_mode:
+            print(f'Add segment with last_seg_pos_x {last_seg_pos_x} and last_seg_pos_y {last_seg_pos_y}')
+
         last_seg_last_dir = self.body[last_i][E_SEGMENT['last_dir']]
         last_seg_last_pos_x = self.body[last_i][E_SEGMENT['last_x']]
         last_seg_last_pos_y = self.body[last_i][E_SEGMENT['last_y']]
@@ -72,6 +83,9 @@ class Snake:
             self.pos_x -= 1
         if self.dir == 'r':
             self.pos_x += 1
+        
+        if self.is_debug_mode:
+            print(f'head pos is snake_pos_x {self.pos_x} and snake_pos_y {self.pos_y}')
 
         # update body pos
         for i, segment in enumerate(self.body):
@@ -88,19 +102,14 @@ class Snake:
                 segment[E_SEGMENT['dir']] = self.dir
             else:
                 prev_elem = i - 1
-                # TODO save the last direction changed with the postion to just change the direction there
-                # TODO instead of always
                 if (segment[E_SEGMENT['x']] == segment[E_SEGMENT['last_x']]) or (segment[E_SEGMENT['y']] == segment[E_SEGMENT['last_y']]):
                     segment[E_SEGMENT['dir']] = segment[E_SEGMENT['last_dir']]
                     segment[E_SEGMENT['last_dir']] = self.body[prev_elem][E_SEGMENT['last_dir']]
                     segment[E_SEGMENT['last_x']] = self.body[prev_elem][E_SEGMENT['last_x']]
                     segment[E_SEGMENT['last_y']] = self.body[prev_elem][E_SEGMENT['last_y']]
-
-
-                    
-            print(f'segment {i} dir {segment[E_SEGMENT["dir"]]}')
-        #print('snake_pos_x', self.pos_x)
-        #print('snake_pos_y', self.pos_y)
+            if self.is_debug_mode:
+                print(f'segment {i} dir {segment[E_SEGMENT["dir"]]}')
+                #pass
 
     def draw_head(self):
         transformed_pos_x = self.pos_x * self.grid.cell_width
