@@ -5,7 +5,9 @@ This is a basic snake game built with python.
 The game consists in keeping the snake alive as long as possible while eating the fruit that appears without colliding with the walls.
 
 ## How to run the game
-- Add steps when the game is finished.
+- Download and extract the snake_game.zip
+- Go to dist folder
+- Run the snake_game.exe
 
 ## Dependencies to clone the repository
 - Install python
